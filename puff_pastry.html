@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puff Pastry - SVG Illustration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFE5B4 0%, #FFDAB9 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .puff-container {
+            background: linear-gradient(135deg, #FFF8DC, #FFEFD5);
+            border: 3px solid #DAA520;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(218, 165, 32, 0.2);
+            min-height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.1));
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #DAA520, #CD853F);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(218, 165, 32, 0.4);
+        }
+
+        .description {
+            background: #FFF8DC;
+            padding: 20px;
+            border-radius: 10px;
+            color: #666;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .puff-container {
+                padding: 20px;
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🥐 Puff Pastry</h1>
+        <p class="subtitle">Delicious Layered Pastry Illustration</p>
+
+        <div class="puff-container">
+            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+                <!-- Shadow -->
+                <ellipse cx="200" cy="360" rx="120" ry="20" fill="rgba(0,0,0,0.1)"/>
+
+                <!-- Main Puff - Bottom Layer -->
+                <path d="M 100 200 Q 80 150 120 100 Q 150 60 200 50 Q 250 60 280 100 Q 320 150 300 200 Q 320 240 280 270 Q 250 290 200 300 Q 150 290 120 270 Q 80 240 100 200 Z" 
+                      fill="#D4A574" stroke="#8B6F47" stroke-width="2"/>
+
+                <!-- Puff - Middle bulges (texture) -->
+                <ellipse cx="150" cy="120" rx="45" ry="50" fill="#E8C5A0" opacity="0.8"/>
+                <ellipse cx="200" cy="85" rx="50" ry="45" fill="#E8C5A0" opacity="0.8"/>
+                <ellipse cx="250" cy="120" rx="45" ry="50" fill="#E8C5A0" opacity="0.8"/>
+                
+                <!-- Top bulges for fluffy effect -->
+                <ellipse cx="130" cy="140" rx="40" ry="45" fill="#F0D99D" opacity="0.7"/>
+                <ellipse cx="200" cy="70" rx="55" ry="50" fill="#F0D99D" opacity="0.7"/>
+                <ellipse cx="270" cy="140" rx="40" ry="45" fill="#F0D99D" opacity="0.7"/>
+
+                <!-- Layered texture lines -->
+                <path d="M 120 160 Q 150 140 200 130 Q 250 140 280 160" 
+                      stroke="#8B6F47" stroke-width="1.5" fill="none" opacity="0.5"/>
+                <path d="M 110 190 Q 150 175 200 170 Q 250 175 290 190" 
+                      stroke="#8B6F47" stroke-width="1.5" fill="none" opacity="0.5"/>
+                <path d="M 120 230 Q 160 220 200 215 Q 240 220 280 230" 
+                      stroke="#8B6F47" stroke-width="1.5" fill="none" opacity="0.5"/>
+
+                <!-- Shine/highlight for glossy effect -->
+                <ellipse cx="160" cy="110" rx="35" ry="30" fill="white" opacity="0.3"/>
+                <ellipse cx="220" cy="90" rx="28" ry="25" fill="white" opacity="0.25"/>
+
+                <!-- Crispy edges detail -->
+                <path d="M 100 200 L 95 210 L 105 215" stroke="#8B6F47" stroke-width="1" fill="none" opacity="0.6"/>
+                <path d="M 300 200 L 305 210 L 295 215" stroke="#8B6F47" stroke-width="1" fill="none" opacity="0.6"/>
+                <path d="M 200 50 L 205 45 L 210 50" stroke="#8B6F47" stroke-width="1" fill="none" opacity="0.6"/>
+
+                <!-- Interior layers visible at edge -->
+                <path d="M 110 240 Q 140 260 170 275" stroke="#CD853F" stroke-width="2" fill="none" opacity="0.6"/>
+                <path d="M 290 240 Q 260 260 230 275" stroke="#CD853F" stroke-width="2" fill="none" opacity="0.6"/>
+
+                <!-- Golden brown spots for realism -->
+                <circle cx="140" cy="150" r="8" fill="#A0826D" opacity="0.4"/>
+                <circle cx="260" cy="160" r="10" fill="#A0826D" opacity="0.4"/>
+                <circle cx="190" cy="110" r="6" fill="#A0826D" opacity="0.3"/>
+                <circle cx="240" cy="200" r="7" fill="#A0826D" opacity="0.35"/>
+
+                <!-- Butter/gloss coating -->
+                <path d="M 135 195 Q 155 185 175 190" stroke="#FFE4B5" stroke-width="2" fill="none" opacity="0.6"/>
+                <path d="M 225 185 Q 245 190 265 195" stroke="#FFE4B5" stroke-width="2" fill="none" opacity="0.5"/>
+            </svg>
+        </div>
+
+        <div class="description">
+            <p><strong>🥐 Puff Pastry (Pâte Feuilletée)</strong></p>
+            <p style="margin-top: 10px;">
+                A delicate, flaky pastry made from thin layers of dough and butter. Puff pastry puffs up during baking 
+                as the steam between layers creates the characteristic light, airy texture. Perfect for sweet and savory applications!
+            </p>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="downloadSVG()">⬇️ Download Image</button>
+        </div>
+    </div>
+
+    <script>
+        function downloadSVG() {
+            const svg = document.querySelector('svg');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const canvas = document.createElement('canvas');
+            canvas.width = 400;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+            
+            const img = new Image();
+            img.onload = function() {
+                ctx.fillStyle = '#FFF8DC';
+                ctx.fillRect(0, 0, 400, 400);
+                ctx.drawImage(img, 0, 0);
+                
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = 'puff_pastry.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+        }
+    </script>
+</body>
+</html>
