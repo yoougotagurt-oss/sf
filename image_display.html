@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Display - SF1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.05em;
+            margin-bottom: 20px;
+        }
+
+        .image-box {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .image-box:hover {
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.25);
+            transform: translateY(-5px);
+        }
+
+        .image-box img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .image-box img:hover {
+            transform: scale(1.02);
+        }
+
+        .image-info {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .image-info strong {
+            color: #333;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f4ff;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .image-box {
+                padding: 15px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📸 Image Gallery</h1>
+            <p class="subtitle">View SF1 Image</p>
+        </header>
+
+        <div class="image-box">
+            <img src="sf1.png" alt="SF1 Image Display" onerror="handleImageError()">
+            <div class="image-info">
+                <strong>File Name:</strong> sf1.png<br>
+                <strong>Status:</strong> <span id="imageStatus">Loading...</span>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="downloadImage()">
+                ⬇️ Download Image
+            </button>
+            <button class="btn btn-secondary" onclick="refreshImage()">
+                🔄 Refresh
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function handleImageError() {
+            document.getElementById('imageStatus').textContent = 'Image not found or failed to load';
+            document.getElementById('imageStatus').style.color = '#f44336';
+        }
+
+        function handleImageLoad() {
+            document.getElementById('imageStatus').textContent = 'Image loaded successfully';
+            document.getElementById('imageStatus').style.color = '#4caf50';
+        }
+
+        function downloadImage() {
+            const link = document.createElement('a');
+            link.href = 'sf1.png';
+            link.download = 'sf1.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function refreshImage() {
+            const img = document.querySelector('.image-box img');
+            const src = img.src;
+            img.src = '';
+            img.src = src + '?' + new Date().getTime();
+        }
+
+        // Check if image loaded successfully
+        document.addEventListener('DOMContentLoaded', function() {
+            const img = document.querySelector('.image-box img');
+            if (img.complete) {
+                if (img.naturalHeight === 0) {
+                    handleImageError();
+                } else {
+                    handleImageLoad();
+                }
+            } else {
+                img.addEventListener('load', handleImageLoad);
+                img.addEventListener('error', handleImageError);
+            }
+        });
+    </script>
+</body>
+</html>
