@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>My Funny Cat - Kids Edition</title>
+    <style>
+        :root {
+            /* Warm cat-themed background */
+            --bg-color: #fff3e0; 
+            --card-bg: #ffffff;
+            --btn-blue: #29b6f6;
+            --btn-blue-shadow: #0288d1;
+            --btn-green: #66bb6a;
+            --btn-green-shadow: #388e3c;
+            
+            /* Poem specific colors mapped exactly to the image */
+            --color-orange: #c8711e; /* pet, cat */
+            --color-red: #d32f2f; /* ears, tail, whiskers */
+            --color-blue: #1565c0; /* fish */
+            --color-purple: #7b1fa2; /* sleep, sleeps */
+            --color-grey: #808080; /* mouse */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* VIEW TOGGLE BUTTON */
+        .view-toggle-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ffffff;
+            border: 2px solid #ccc;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-family: inherit;
+            transition: transform 0.1s;
+        }
+        .view-toggle-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+
+        /* SCREEN MANAGEMENT */
+        .screen {
+            display: none;
+            padding: 20px;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 70px; /* Space for the toggle button */
+        }
+        .screen.active {
+            display: flex;
+        }
+
+        /* MENU SCREEN */
+        .title {
+            font-size: 2.8rem;
+            text-align: center;
+            margin: 20px 0 40px 0;
+            color: #d84315;
+            text-shadow: 2px 2px 0px #fff;
+        }
+
+        .menu-btn-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            gap: 30px;
+        }
+
+        .menu-btn {
+            width: 100%;
+            max-width: 350px;
+            padding: 30px 20px;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .menu-btn.btn-a {
+            background-color: var(--btn-blue);
+            box-shadow: 0 10px 0 var(--btn-blue-shadow);
+        }
+        .menu-btn.btn-b {
+            background-color: var(--btn-green);
+            box-shadow: 0 10px 0 var(--btn-green-shadow);
+        }
+
+        .menu-btn:active {
+            transform: translateY(10px);
+            box-shadow: 0 0px 0 transparent !important;
+        }
+
+        /* NAVIGATION BAR */
+        .nav-bar {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: max-width 0.3s ease;
+        }
+        .back-btn {
+            background-color: #ffca28;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #d84315;
+            box-shadow: 0 6px 0 #ff8f00;
+            cursor: pointer;
+        }
+        .back-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 transparent;
+        }
+        .progress-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #555;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 0 #ccc;
+        }
+        
+        .toggle-container {
+            background: white; 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            box-shadow: 0 2px 0 #ccc; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+        }
+
+        /* ----------------------------------- */
+        /* FLASHCARD MODE (LINE BY LINE)       */
+        /* ----------------------------------- */
+        .flashcard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            flex: 1;
+            transition: max-width 0.3s ease;
+        }
+
+        #lbl-card {
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 0px #b0bec5;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 25px;
+            user-select: none; 
+            -webkit-user-select: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #lbl-card:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0px #b0bec5;
+        }
+
+        .line-text {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.5;
+            transition: font-size 0.3s ease;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #000;
+            aspect-ratio: 16/9;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none; /* Let the card handle clicks */
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5rem;
+            color: white;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transition: opacity 0.2s;
+        }
+        
+        .playing .play-overlay {
+            opacity: 0;
+        }
+
+        .toddler-controls {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 15px;
+        }
+
+        .toddler-btn {
+            flex: 1;
+            padding: 20px 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .btn-prev { background-color: #ffb300; box-shadow: 0 8px 0 #ff8f00; }
+        .btn-next { background-color: #4caf50; box-shadow: 0 8px 0 #388e3c; }
+
+        .toddler-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 transparent;
+        }
+
+        .toddler-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+        }
+
+        /* ----------------------------------- */
+        /* PLAY ALL MODE                       */
+        /* ----------------------------------- */
+        #play-all-container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            transition: max-width 0.3s ease;
+        }
+
+        .start-btn-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .giant-start-btn {
+            background-color: var(--btn-green);
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 20px 40px;
+            border-radius: 30px;
+            border: none;
+            box-shadow: 0 8px 0 var(--btn-green-shadow);
+            cursor: pointer;
+        }
+        .giant-start-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 transparent;
+        }
+
+        #subtitle-box {
+            background-color: white;
+            width: 100%;
+            margin-top: 25px;
+            padding: 25px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 0px #b0bec5;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            line-height: 1.5;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: font-size 0.3s ease;
+        }
+
+        /* Text Colors */
+        .txt-orange { color: var(--color-orange); }
+        .txt-red { color: var(--color-red); }
+        .txt-blue { color: var(--color-blue); }
+        .txt-purple { color: var(--color-purple); }
+        .txt-grey { color: var(--color-grey); }
+
+        /* ========================================= */
+        /* 🖥️ DESKTOP MODE OVERRIDES 🖥️             */
+        /* ========================================= */
+        body.desktop-mode .title {
+            font-size: 4rem;
+            margin: 10px 0 60px 0;
+        }
+        
+        body.desktop-mode .menu-btn-group {
+            flex-direction: row;
+            justify-content: center;
+            gap: 50px;
+        }
+        
+        body.desktop-mode .menu-btn {
+            max-width: 400px;
+            padding: 40px 20px;
+            font-size: 2rem;
+        }
+
+        body.desktop-mode .nav-bar,
+        body.desktop-mode .flashcard-container,
+        body.desktop-mode #play-all-container {
+            max-width: 1100px;
+        }
+
+        /* Side-by-side flashcard layout for Desktop */
+        body.desktop-mode #lbl-card {
+            flex-direction: row;
+            align-items: center;
+            padding: 40px;
+            gap: 40px;
+        }
+
+        body.desktop-mode .line-text {
+            flex: 1;
+            font-size: 2.2rem;
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        body.desktop-mode #lbl-video-wrapper {
+            flex: 1.5;
+            max-width: 650px;
+        }
+
+        body.desktop-mode .toddler-controls {
+            max-width: 800px;
+            margin-top: 10px;
+        }
+        
+        body.desktop-mode .toddler-btn {
+            font-size: 2rem;
+            padding: 25px 10px;
+        }
+
+        body.desktop-mode #subtitle-box {
+            font-size: 2rem;
+            padding: 35px 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- TOGGLE SWITCH FOR PHONE/DESKTOP -->
+    <button id="view-toggle-btn" class="view-toggle-btn" onclick="toggleViewMode()">🖥️ Desktop Version</button>
+
+    <!-- SCREEN 1: MENU -->
+    <div id="screen-menu" class="screen active">
+        <h1 class="title">🐱 My Funny Cat 🐱</h1>
+        
+        <div class="menu-btn-group">
+            <button class="menu-btn btn-a" onclick="openMode('line-by-line')">
+                📖 Learn Line by Line
+                <div style="font-size:1.2rem; font-weight:normal; margin-top:5px;">(Flashcard Mode)</div>
+            </button>
+            
+            <button class="menu-btn btn-b" onclick="openMode('play-all')">
+                🍿 Watch the Movie
+                <div style="font-size:1.2rem; font-weight:normal; margin-top:5px;">(Plays all together)</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: LINE BY LINE (FLASHCARD) -->
+    <div id="screen-line-by-line" class="screen">
+        <div class="nav-bar">
+            <button class="back-btn" onclick="openMode('menu')">🏠 Home</button>
+            <div class="toggle-container">
+                <input type="checkbox" id="auto-next-toggle" checked style="transform: scale(1.3);">
+                <label for="auto-next-toggle" style="font-size: 1rem; font-weight: bold; color: #555;">Auto-Next</label>
+            </div>
+            <div class="progress-text" id="lbl-progress">1 / 19</div>
+        </div>
+        
+        <div class="flashcard-container">
+            <div id="lbl-card" onclick="toggleLblVideo()">
+                <div class="line-text" id="lbl-text">
+                    <div style="width: 100%;"></div>
+                </div>
+                <div class="video-wrapper" id="lbl-video-wrapper">
+                    <video id="lbl-video" playsinline disablePictureInPicture></video>
+                    <div class="play-overlay">▶️</div>
+                </div>
+            </div>
+
+            <div class="toddler-controls">
+                <button class="toddler-btn btn-prev" id="btn-prev" onclick="changeLine(-1)">⬅️ PREV</button>
+                <button class="toddler-btn btn-next" id="btn-next" onclick="changeLine(1)">NEXT ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: PLAY ALL -->
+    <div id="screen-play-all" class="screen">
+        <div class="nav-bar">
+            <button class="back-btn" onclick="openMode('menu')">🏠 Home</button>
+        </div>
+        <div id="play-all-container">
+            <div class="video-wrapper" style="box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                <video id="main-video" playsinline disablePictureInPicture></video>
+                <div id="start-overlay" class="start-btn-overlay">
+                    <button class="giant-start-btn" onclick="startPlayAll()">▶️ PLAY</button>
+                </div>
+            </div>
+            <div id="subtitle-box">
+                <div style="width: 100%;">Press PLAY to start!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure with Catbox Links
+        const poemData = [
+            { text: `"A very good morning to the judges, teachers, and friends.<br>My name is TOW MEI YI. I am from Class 2M."`, vid: "https://carrotbunny6-sudo.github.io/tmy/cat1.mp4" },
+            { text: `"Today, I will recite a poem titled... My Funny Cat."`, vid: "https://carrotbunny6-sudo.github.io/tmy/cat2.mp4" },
+            { text: `I have a <span class="txt-orange">pet</span>. It has two small <span class="txt-red">ears</span>.`, vid: "https://carrotbunny6-sudo.github.io/tmy/cat3.mp4" },
+            { text: `It has a long <span class="txt-red">tail</span>. Swish, swish.`, vid: "https://carrotbunny6-sudo.github.io/tmy/cat4.mp4" },
+            { text: `It has <span class="txt-red">whiskers</span>. Meow, meow, meow.`, vid: "https://files.catbox.moe/tg76r3.mp4" },
+            { text: `Yes, it is a <span class="txt-orange">cat</span>!`, vid: "https://files.catbox.moe/xd0jdd.mp4" },
+            { text: `My <span class="txt-orange">cat</span> is big. My <span class="txt-orange">cat</span> is very, very fat.`, vid: "https://files.catbox.moe/0iympm.mp4" },
+            { text: `He loves to eat <span class="txt-blue">fish</span>. Chomp, chomp, chomp. Yummy!`, vid: "https://files.catbox.moe/7mv1wl.mp4" },
+            { text: `Now, he is full. He wants to <span class="txt-purple">sleep</span>.`, vid: "https://files.catbox.moe/5pqwj2.mp4" },
+            { text: `He <span class="txt-purple">sleeps</span> on the mat. He <span class="txt-purple">sleeps</span> all day long.`, vid: "https://files.catbox.moe/bjscpy.mp4" },
+            { text: `Quiet, please. Without a peep. Shhh.`, vid: "https://files.catbox.moe/0iapbo.mp4" },
+            { text: `Suddenly! What is that sound?`, vid: "https://files.catbox.moe/r86ppu.mp4" },
+            { text: `Squeak, squeak, squeak! A tiny <span class="txt-grey">mouse</span>!`, vid: "https://files.catbox.moe/zl8cdk.mp4" },
+            { text: `He sees a <span class="txt-grey">mouse</span>! Inside the house!`, vid: "https://files.catbox.moe/sg3hoz.mp4" },
+            { text: `Wake up, lazy <span class="txt-orange">cat</span>!`, vid: "https://files.catbox.moe/wdy93x.mp4" },
+            { text: `He jumps! He runs! Fast, fast, fast!`, vid: "https://files.catbox.moe/e54s6d.mp4" },
+            { text: `Bye-bye, little <span class="txt-grey">mouse</span>!`, vid: "https://files.catbox.moe/y27z31.mp4" },
+            { text: `Oh, what a funny <span class="txt-orange">cat</span>!`, vid: "https://files.catbox.moe/vcf0e8.mp4" },
+            { text: `🙏 "Thank you." 🙏`, vid: null }
+        ];
+
+        // --- VIEW MODE TOGGLE ---
+        let isDesktopMode = false;
+        function toggleViewMode() {
+            const body = document.body;
+            const btn = document.getElementById('view-toggle-btn');
+            
+            isDesktopMode = !isDesktopMode;
+            
+            if (isDesktopMode) {
+                body.classList.add('desktop-mode');
+                btn.innerHTML = '📱 Phone Version';
+            } else {
+                body.classList.remove('desktop-mode');
+                btn.innerHTML = '🖥️ Desktop Version';
+            }
+        }
+
+        // --- SCREEN WAKELOCK ---
+        let wakeLock = null;
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {}
+        }
+        function releaseWakeLock() {
+            if (wakeLock !== null) {
+                wakeLock.release().then(() => wakeLock = null);
+            }
+        }
+
+        // --- LINE BY LINE (FLASHCARD) LOGIC ---
+        let currentLineIndex = 0;
+        const lblCard = document.getElementById('lbl-card');
+        const lblText = document.getElementById('lbl-text');
+        const lblVideoWrapper = document.getElementById('lbl-video-wrapper');
+        const lblVideo = document.getElementById('lbl-video');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const lblProgress = document.getElementById('lbl-progress');
+        const autoNextToggle = document.getElementById('auto-next-toggle');
+
+        function loadLine(index, autoPlay = false) {
+            lblVideo.pause();
+            lblCard.classList.remove('playing');
+            
+            const item = poemData[index];
+            lblText.innerHTML = `<div style="width: 100%;">${item.text}</div>`;
+            lblProgress.innerText = `${index + 1} / ${poemData.length}`;
+
+            if (item.vid) {
+                lblVideoWrapper.style.display = 'block';
+                lblVideo.src = item.vid;
+                if(autoPlay) {
+                    const playPromise = lblVideo.play();
+                    if(playPromise !== undefined) {
+                        playPromise.then(() => lblCard.classList.add('playing')).catch(() => {});
+                    }
+                }
+            } else {
+                lblVideoWrapper.style.display = 'none';
+                lblVideo.src = '';
+            }
+
+            btnPrev.disabled = (index === 0);
+            btnNext.disabled = (index === poemData.length - 1);
+        }
+
+        function changeLine(step, autoPlay = false) {
+            const newIndex = currentLineIndex + step;
+            if (newIndex >= 0 && newIndex < poemData.length) {
+                currentLineIndex = newIndex;
+                loadLine(currentLineIndex, autoPlay);
+            }
+        }
+
+        function toggleLblVideo() {
+            if (!poemData[currentLineIndex].vid) return;
+            
+            if (lblVideo.paused) {
+                lblVideo.play();
+                lblCard.classList.add('playing');
+            } else {
+                lblVideo.pause();
+                lblCard.classList.remove('playing');
+            }
+        }
+
+        // Auto-Advance
+        lblVideo.onended = () => {
+            lblCard.classList.remove('playing');
+            if (autoNextToggle.checked && currentLineIndex < poemData.length - 1) {
+                setTimeout(() => changeLine(1, true), 1000);
+            }
+        };
+
+        // Swipe Gestures
+        let touchStartX = 0;
+        let touchEndX = 0;
+        lblCard.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, {passive: true});
+
+        lblCard.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            const swipeDistance = touchStartX - touchEndX;
+            
+            if (swipeDistance > 50) {
+                changeLine(1);
+            } else if (swipeDistance < -50) {
+                changeLine(-1);
+            }
+        }, {passive: true});
+
+        // --- PLAY ALL LOGIC ---
+        let playAllIndex = 0;
+        const mainVideo = document.getElementById('main-video');
+        const subtitleBox = document.getElementById('subtitle-box');
+        const startOverlay = document.getElementById('start-overlay');
+
+        function startPlayAll() {
+            startOverlay.style.display = 'none';
+            playAllIndex = 0;
+            requestWakeLock();
+            playNextSequence();
+        }
+
+        function playNextSequence() {
+            if (playAllIndex >= poemData.length) {
+                subtitleBox.innerHTML = '<div style="width: 100%;">🎉 All Done! Great Job! 🎉</div>';
+                startOverlay.style.display = 'flex';
+                startOverlay.innerHTML = '<button class="giant-start-btn" onclick="startPlayAll()">🔄 Play Again</button>';
+                releaseWakeLock();
+                return;
+            }
+
+            const item = poemData[playAllIndex];
+            subtitleBox.innerHTML = `<div style="width: 100%;">${item.text}</div>`;
+
+            if (item.vid) {
+                mainVideo.parentElement.style.display = 'block';
+                mainVideo.src = item.vid;
+                mainVideo.play();
+            } else {
+                mainVideo.parentElement.style.display = 'none';
+                setTimeout(() => {
+                    playAllIndex++;
+                    playNextSequence();
+                }, 3000);
+            }
+        }
+
+        mainVideo.onended = () => {
+            playAllIndex++;
+            playNextSequence();
+        };
+
+        // --- NAVIGATION ---
+        function openMode(mode) {
+            lblVideo.pause();
+            mainVideo.pause();
+            lblCard.classList.remove('playing');
+            releaseWakeLock();
+
+            startOverlay.style.display = 'flex';
+            startOverlay.innerHTML = '<button class="giant-start-btn" onclick="startPlayAll()">▶️ PLAY</button>';
+            subtitleBox.innerHTML = '<div style="width: 100%;">Press PLAY to start!</div>';
+            mainVideo.parentElement.style.display = 'block';
+            mainVideo.src = "";
+
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-' + mode).classList.add('active');
+            
+            if(mode === 'line-by-line') {
+                currentLineIndex = 0;
+                loadLine(currentLineIndex);
+            }
+            
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
